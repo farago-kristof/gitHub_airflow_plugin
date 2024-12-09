@@ -16,13 +16,13 @@ default_args = {
 default_task_args = {
     'owner': 'farad213',
     'session_name': 'github_session',
-    'auth_id': 'authenticate',
+    'auth_task_id': 'authenticate',
     'repo_name': 'fugro_3'
 }
 
 with DAG('github_dag', default_args=default_args, schedule_interval=None) as dag:
     authenticate = GitHubAuthOperator(
-        task_id=default_task_args['auth_id'],
+        task_id=default_task_args['auth_task_id'],
         session_name=default_task_args['session_name'],
         token='{{ var.value.github_token }}'
     )
@@ -46,7 +46,7 @@ with DAG('github_dag', default_args=default_args, schedule_interval=None) as dag
 
     fetch_issues = GitHubIssuesOperator(
         task_id='fetch_issues',
-        assigne='farad213',
+        assignee='farad213',
         **default_task_args
     )
 
