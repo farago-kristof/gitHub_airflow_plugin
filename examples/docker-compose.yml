@@ -1,5 +1,6 @@
 services:
   airflow:
+    image: airflow-gh-example:${USER}-latest
     build:
       context: ../src
       dockerfile: ../docker/Dockerfile
@@ -7,12 +8,16 @@ services:
       - "8080:8080"
     volumes:
       - ./dags:/opt/airflow/dags
+      - ./secrets.json:/opt/airflow/secrets.json
     restart: unless-stopped
-    container_name: ${USER}-airflow-example
+    container_name: ${USER}-airflow-gh-example
     environment:
-      - AIRFLOW__CORE__LOAD_EXAMPLES=False
-      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
-      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:////opt/airflow/airflow.db
+      AIRFLOW__CORE__LOAD_EXAMPLES: False
+      AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: sqlite:////opt/airflow/airflow.db
+      AIRFLOW__SECRETS__BACKEND: airflow.secrets.local_filesystem.LocalFilesystemBackend
+      AIRFLOW__SECRETS__BACKEND_KWARGS: '{"connections_file_path":"/opt/airflow/secrets.json"}'
+      AIRFLOW__CORE__ENABLE_XCOM_PICKLING: True
     command: >
       bash -c "
         airflow scheduler & 
