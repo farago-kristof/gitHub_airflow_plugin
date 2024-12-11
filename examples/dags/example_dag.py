@@ -1,13 +1,37 @@
+"""Example gitHub DAG for Airflow
+
+This module defines an Airflow DAG that interacts with the GitHub API to perform
+various repository-related operations, such as fetching pull requests, branches,
+commits, and issues. It demonstrates the use of custom operators to interact with GitHub,
+while leveraging Airflow's PythonOperator for logging XCom values.
+
+Module Components:
+- `GitHubAuthOperator`: Authenticates with GitHub and initializes a keep-alive TCP session.
+- `GitHubPullRequestOperator`: Fetches pull requests from a specified GitHub repository.
+- `GitHubBranchesOperator`: Retrieves branches from the repository.
+- `GitHubCommitsOperator`: Fetches commits for a specified branch.
+- `GitHubIssuesOperator`: Fetches issues assigned to a specific user.
+- `log_xcom`: Python callable function to log XCom values pushed by previous tasks.
+- Airflow DAG: Defines the execution flow for authentication and data fetching tasks.
+
+Usage:
+1. Configure a GitHub connection in Airflow with the ID `github_conn_id` Youi can do it through a secrets.json file in
+    examples directory.
+2. Replace `repo_name` and `assignee` with appropriate values for your GitHub repository and user.
+3. Run docker compose up from examples directory.
+4. Trigger the DAG manually."""
+
+
 from datetime import datetime
 
 from airflow import DAG
 
+from airflow.operators.python import PythonOperator
 from operators.auth import GitHubAuthOperator
 from operators.repo import GitHubPullRequestOperator
 from operators.repo import GitHubIssuesOperator
 from operators.repo import GitHubBranchesOperator
 from operators.repo import GitHubCommitsOperator
-from airflow.operators.python import PythonOperator
 
 # Default arguments for DAG and tasks
 default_args = {
@@ -16,10 +40,10 @@ default_args = {
 }
 
 default_task_args = {
-    'owner': 'farad213',
+    'owner': 'placeholder',
     'session_name': 'github_session',
     'auth_task_id': 'authenticate',
-    'repo_name': 'fugro_3'
+    'repo_name': 'placeholder'
 }
 
 def log_xcom(**kwargs):
@@ -79,7 +103,7 @@ with DAG('github_dag', default_args=default_args, schedule_interval=None) as dag
 
     fetch_issues = GitHubIssuesOperator(
         task_id='fetch_issues',
-        assignee='farad213',
+        assignee='placeholder',
         **default_task_args
     )
 
