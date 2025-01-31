@@ -18,7 +18,7 @@ jobs:
       # Generate .rst files from the Python modules using sphinx-apidoc
       - name: Generate .rst files with sphinx-apidoc
         run: |
-          sphinx-apidoc -o docs/source/ ../src
+          sphinx-apidoc -o docs/source/ ../../src
 
       # Run the Sphinx build to generate the HTML output
       - name: Sphinx build

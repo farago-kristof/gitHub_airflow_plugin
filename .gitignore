@@ -3,3 +3,4 @@
 sandbox.py
 .env
 secrets.json
+docs/build
