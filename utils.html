@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>utils package &#8212; gitHubAirflow 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=8d563738"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="operators package" href="operators.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="utils-package">
+<h1>utils package<a class="headerlink" href="#utils-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-utils.decoartors">
+<span id="utils-decoartors-module"></span><h2>utils.decoartors module<a class="headerlink" href="#module-utils.decoartors" title="Link to this heading">¶</a></h2>
+<p>This module contains utility decorators for managing function retries and enforcing singleton behavior for classes.</p>
+<ul class="simple">
+<li><p><cite>exponential_backoff</cite>: A decorator that implements an exponential backoff strategy with optional jitter for retrying
+operations that may intermittently fail (e.g., network requests or API calls).</p></li>
+<li><p><cite>singleton</cite>: A decorator that ensures only one instance of a class is created and returned. The same instance will be
+used for all subsequent calls, applying the Singleton design pattern to the class.</p></li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.decoartors.exponential_backoff">
+<span class="sig-prename descclassname"><span class="pre">utils.decoartors.</span></span><span class="sig-name descname"><span class="pre">exponential_backoff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiplier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jitter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.decoartors.exponential_backoff" title="Link to this definition">¶</a></dt>
+<dd><p>A decorator that implements exponential backoff.
+This decorator retries a function upon failure, exponentially increasing the delay between retries.
+The delay follows the formula <cite>delay * multiplier</cite> for each retry. Optionally, a random “jitter” can be added
+to avoid overwhelming the target system with simultaneous retries.
+:param max_retries: Maximum number of retries before giving up.
+:param initial_delay: Initial delay between retries (in seconds).
+:param multiplier: Exponential backoff multiplier (each retry is <cite>delay * multiplier</cite>).
+:param jitter: Whether to add random “jitter” to the delay to avoid thundering herd problems.
+:return: The wrapped function that implements exponential backoff.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.decoartors.singleton">
+<span class="sig-prename descclassname"><span class="pre">utils.decoartors.</span></span><span class="sig-name descname"><span class="pre">singleton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="headerlink" href="#utils.decoartors.singleton" title="Link to this definition">¶</a></dt>
+<dd><p>A decorator function that ensures a single instance of a class is created and returned on subsequent calls.
+:param cls: The class for which the singleton pattern is applied.
+:return: The single instance of the class.
+Taken from <a class="reference external" href="https://peps.python.org/pep-0318/#examples">https://peps.python.org/pep-0318/#examples</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cls</strong> (<em>Type</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Callable</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-utils.request">
+<span id="utils-request-module"></span><h2>utils.request module<a class="headerlink" href="#module-utils.request" title="Link to this heading">¶</a></h2>
+<p>This module defines a <cite>Request</cite> class to represent HTTP requests and a <cite>RequestBuilder</cite> class for constructing
+requests in a flexible and fluent manner.</p>
+<ul class="simple">
+<li><p><cite>Request</cite>: A data class representing an HTTP request, including attributes for method, endpoint, base URL,
+query parameters, data, JSON body, and headers. The <cite>url</cite> property constructs the full URL from the base URL
+and endpoint, while the <cite>validate</cite> method checks the required fields.</p></li>
+<li><p><cite>RequestBuilder</cite>: A builder class for constructing <cite>Request</cite> objects. It provides methods for setting the HTTP
+method, endpoint, base URL, query parameters, data, JSON body, and headers. The <cite>build</cite> method validates the
+constructed request and returns it.</p></li>
+</ul>
+<dl class="simple">
+<dt>Usage example:</dt><dd><p>request = RequestBuilder().set_method(“GET”).set_base_url(”<a class="reference external" href="https://api.github.com">https://api.github.com</a>”).set_endpoint(“repos/owner/repo/pulls”).build()
+print(request.endpoint)  # Outputs: ‘repos/owner/repo/pulls’</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.request.Request">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.request.</span></span><span class="sig-name descname"><span class="pre">Request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoint:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_url:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_params:</span> <span class="pre">~typing.Dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~typing.Any]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data:</span> <span class="pre">~typing.Dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~typing.Any]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json:</span> <span class="pre">~typing.Dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~typing.Any]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers:</span> <span class="pre">~typing.Dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~typing.Any]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.request.Request" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents an HTTP request with method, endpoint, base URL, query parameters,
+data, JSON body, and headers.
+:param method: HTTP method (e.g., ‘GET’, ‘POST’).
+:param endpoint: The endpoint to be appended to the base URL.
+:param base_url: The base URL for the API.
+:param query_params: Dictionary of query parameters to be included in the request.
+:param data: Dictionary of data to be sent in the body of the request (e.g., for ‘POST’ requests).
+:param json: JSON payload to be sent in the body of the request.
+:param headers: Dictionary of headers to be sent with the request.
+:property url: Constructs the full URL by combining the base URL and endpoint.
+:raises ValueError: If the method, base URL, or endpoint is not provided.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>method</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>endpoint</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>base_url</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>query_params</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>)</p></li>
+<li><p><strong>data</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>)</p></li>
+<li><p><strong>json</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>)</p></li>
+<li><p><strong>headers</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="utils.request.Request.base_url">
+<span class="sig-name descname"><span class="pre">base_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#utils.request.Request.base_url" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="utils.request.Request.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#utils.request.Request.data" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="utils.request.Request.endpoint">
+<span class="sig-name descname"><span class="pre">endpoint</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#utils.request.Request.endpoint" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="utils.request.Request.headers">
+<span class="sig-name descname"><span class="pre">headers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#utils.request.Request.headers" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="utils.request.Request.json">
+<span class="sig-name descname"><span class="pre">json</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#utils.request.Request.json" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="utils.request.Request.method">
+<span class="sig-name descname"><span class="pre">method</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#utils.request.Request.method" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="utils.request.Request.query_params">
+<span class="sig-name descname"><span class="pre">query_params</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#utils.request.Request.query_params" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="utils.request.Request.url">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">url</span></span><a class="headerlink" href="#utils.request.Request.url" title="Link to this definition">¶</a></dt>
+<dd><p>Constructs the full URL by combining the base URL and endpoint.
+:return: The full URL as a string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.request.Request.validate">
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.request.Request.validate" title="Link to this definition">¶</a></dt>
+<dd><p>Validates the required fields of the request.
+:raises ValueError: If the HTTP method, base URL, or endpoint is missing.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.request.RequestBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.request.</span></span><span class="sig-name descname"><span class="pre">RequestBuilder</span></span><a class="headerlink" href="#utils.request.RequestBuilder" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A builder class for constructing a <cite>Request</cite> object by providing a fluent interface
+to set HTTP method, endpoint, base URL, query parameters, data, JSON body, and headers.
+Usage: request = RequestBuilder().set_method(“GET”).set_base_url(”<a class="reference external" href="https://api.github.com">https://api.github.com</a>”).set_endpoint(“repos/owner/repo/pulls”).build()
+:param _request: The <cite>Request</cite> object being constructed.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.request.RequestBuilder.add_query_param">
+<span class="sig-name descname"><span class="pre">add_query_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.request.RequestBuilder.add_query_param" title="Link to this definition">¶</a></dt>
+<dd><p>Adds query parameters to the request.
+:param kwargs: Key-value pairs of query parameters to add.
+:return? The <cite>RequestBuilder</cite> instance to allow for method chaining.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.request.RequestBuilder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#utils.request.Request" title="utils.request.Request"><span class="pre">Request</span></a></span></span><a class="headerlink" href="#utils.request.RequestBuilder.build" title="Link to this definition">¶</a></dt>
+<dd><p>Builds the final <cite>Request</cite> object after validation.
+:return: The constructed <cite>Request</cite> object.
+:raises ValueError: If the request is not valid (method, base URL, or endpoint missing).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#utils.request.Request" title="utils.request.Request"><em>Request</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.request.RequestBuilder.set_base_url">
+<span class="sig-name descname"><span class="pre">set_base_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.request.RequestBuilder.set_base_url" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the base URL for the request.
+:param base_url: The base URL (e.g., ‘<a class="reference external" href="https://api.github.com">https://api.github.com</a>’).
+:return: The <cite>RequestBuilder</cite> instance to allow for method chaining.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>base_url</strong> (<em>str</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.request.RequestBuilder.set_data">
+<span class="sig-name descname"><span class="pre">set_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.request.RequestBuilder.set_data" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the data to be sent in the body of the request.
+:param kwargs: Key-value pairs of data to send in the request body.
+:return: The <cite>RequestBuilder</cite> instance to allow for method chaining.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.request.RequestBuilder.set_endpoint">
+<span class="sig-name descname"><span class="pre">set_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.request.RequestBuilder.set_endpoint" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the endpoint for the request.
+:param endpoint: The API endpoint to append to the base URL.
+:return: The <cite>RequestBuilder</cite> instance to allow for method chaining.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>endpoint</strong> (<em>str</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.request.RequestBuilder.set_headers">
+<span class="sig-name descname"><span class="pre">set_headers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.request.RequestBuilder.set_headers" title="Link to this definition">¶</a></dt>
+<dd><p>Adds headers to the request.
+:param kwargs: Key-value pairs of headers to add.
+:return: The <cite>RequestBuilder</cite> instance to allow for method chaining.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.request.RequestBuilder.set_json">
+<span class="sig-name descname"><span class="pre">set_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.request.RequestBuilder.set_json" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the JSON payload to be sent in the body of the request.
+:param kwargs: Key-value pairs to send as JSON.
+:return: The <cite>RequestBuilder</cite> instance to allow for method chaining.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.request.RequestBuilder.set_method">
+<span class="sig-name descname"><span class="pre">set_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.request.RequestBuilder.set_method" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the HTTP method for the request.
+:param method: The HTTP method (e.g., ‘GET’, ‘POST’).
+:return: The <cite>RequestBuilder</cite> instance to allow for method chaining.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-utils" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">gitHubAirflow</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="github.html">github package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators.html">operators package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">utils package</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">src</a><ul>
+      <li>Previous: <a href="operators.html" title="previous chapter">operators package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Kristof Farago.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,29 @@
+github package
+==============
+
+Submodules
+----------
+
+github.auth module
+------------------
+
+.. automodule:: github.auth
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+github.repo module
+------------------
+
+.. automodule:: github.repo
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: github
+   :members:
+   :undoc-members:
+   :show-inheritance:
