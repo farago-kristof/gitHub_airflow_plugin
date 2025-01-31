@@ -63,8 +63,7 @@ class Request:
 class RequestBuilder:
     """A builder class for constructing a `Request` object by providing a fluent interface
     to set HTTP method, endpoint, base URL, query parameters, data, JSON body, and headers.
-    Usage:
-        request = RequestBuilder().set_method("GET").set_base_url("https://api.github.com").set_endpoint("repos/owner/repo/pulls").build()
+    Usage: request = RequestBuilder().set_method("GET").set_base_url("https://api.github.com").set_endpoint("repos/owner/repo/pulls").build()
     :param _request: The `Request` object being constructed."""
 
     def __init__(self):
