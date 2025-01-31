@@ -1,0 +1,36 @@
+name: sphinx-build
+
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: write
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - name: Install dependencies
+        run: |
+          pip install sphinx sphinx_rtd_theme myst_parser sphinx-autodoc-typehints
+
+      # Generate .rst files from the Python modules using sphinx-apidoc
+      - name: Generate .rst files with sphinx-apidoc
+        run: |
+          sphinx-apidoc -o docs/source/ ../src
+
+      # Run the Sphinx build to generate the HTML output
+      - name: Sphinx build
+        run: |
+          sphinx-build docs/source/ docs/_build
+
+      # Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        with:
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/
+          force_orphan: true
